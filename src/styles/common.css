@@ -1,0 +1,8 @@
+.page {
+  height: calc(100vh - 60px);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: #f7f7f7;
+  padding: 15px;
+}
