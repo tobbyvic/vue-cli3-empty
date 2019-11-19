@@ -13,10 +13,11 @@ module.exports = {
       .set('base', resolve('src/base'))
       .set('static', resolve('src/static'));
   },
+  lintOnSave: false,
   devServer: {
     proxy: {
-      '/setup/*': {
-        target: 'http://yapi.demo.qunar.com/mock/38448',
+      '/api/*': {
+        target: 'http://172.28.101.5:9806',
         changeOrigin: true,
       },
     },

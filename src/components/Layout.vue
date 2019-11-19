@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-header class="layout-header">Header</el-header>
+    <el-header class="layout-header">工站管理</el-header>
     <div class="page">
       <router-view/>
     </div>
@@ -15,6 +15,9 @@ export default {
 
 <style lang="scss" scoped>
   .layout-header {
+    color: #ffffff;
+    font-size: 23px;
+    font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: space-between;

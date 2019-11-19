@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
-// import { getToken } from '@/utils/auth';
+import { getToken } from './token';
 
 // 创建axios实例
 const service = axios.create({
   baseURL: '/', // api 的 base_url
-  timeout: 5000, // 请求超时时间
+  timeout: 10000, // 请求超时时间
 });
 service.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 
@@ -23,6 +23,10 @@ service.interceptors.request.use((config) => {
   });
   // eslint-disable-next-line no-param-reassign
   config.headers['Cache-Control'] = 'no-cache';
+  if (getToken()) {
+    // eslint-disable-next-line no-param-reassign
+    config.headers.token = getToken();
+  }
   // 1.判断请求是否已存在请求列表，避免重复请求，将当前请求添加进请求列表数组；
   if (requestList.includes(request)) {
     sources[request]('取消重复请求');
@@ -60,7 +64,7 @@ service.interceptors.response.use((response) => {
       duration: 5 * 1000,
     });
   }
-  return response;
+  return response.data;
 }, (error) => {
   // 4.处理取消请求
   if (axios.isCancel(error)) {
