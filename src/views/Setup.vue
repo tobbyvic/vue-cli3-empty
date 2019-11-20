@@ -15,13 +15,13 @@
       <!--第一步-->
       <el-form width="600" v-if="isFirst" :model="form1" :rules="rules1" ref="ruleForm1"
                label-width="100px" label-position="left">
-        <el-form-item label="IP" prop="ip">
+        <el-form-item label="Host" prop="ip">
           <el-input style="width: 300px" v-model="form1.ip"></el-input>
         </el-form-item>
-        <el-form-item label="端口" prop="port">
+        <el-form-item label="Port" prop="port">
           <el-input-number style="width: 300px" v-model="form1.port" controls-position="right" :min="0" :max="65535" :precision="0"></el-input-number>
         </el-form-item>
-        <el-form-item label="数据库" required prop="db">
+        <el-form-item label="Server Name" required prop="db">
           <el-input style="width: 300px" v-model="form1.db"></el-input>
         </el-form-item>
         <el-form-item label="用户名" prop="username">
@@ -181,16 +181,23 @@ export default {
     },
   },
   async created() {
-    // 获取token
-    const res1 = await session();
-    setToken(res1.data);
-    // 获取所有工站
-    const res2 = await stations();
-    this.transferData = res2.data.map(item => ({
-      key: item.id,
-      label: item.name,
-      val: item.alias
-    }))
+    // 获取token, 如果没有token则跳到dashboard.
+    session().then(async res => {
+      if (res.success) {
+        setToken(res.data);
+        // 获取所有工站
+        const res2 = await stations();
+        this.transferData = res2.data.map(item => ({
+          key: item.id,
+          label: item.name,
+          val: item.alias
+        }))
+      } else {
+        this.$router.push('/dashboard');
+      }
+    }).catch(e => {
+      this.$router.push('/dashboard');
+    });
   },
   mounted() {
   },
@@ -295,7 +302,7 @@ export default {
           this.active = 2; // 完成状态
           const params = {
             projectName: this.form2.project,
-            stations: this.tableData.map((item, index) => ({code: index + 1, name: item.alias}))
+            stations: this.tableData.map((item, index) => ({code: index + 1, name: item.name, alias: item.alias}))
           };
           this.$confirm('确认提交?', '提示', {
             confirmButtonText: '确定',
