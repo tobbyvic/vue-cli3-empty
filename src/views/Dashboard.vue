@@ -1,6 +1,6 @@
 <template>
   <div>
-    <my-card v-for="(item, index) in list" :key="index" :title="item.name" :sub-title="item.materialName || 'materialName'" :content="item.alias" :flag="item.result === 'P'"></my-card>
+    <my-card v-for="(item, index) in list" :key="index" :title="item.name" :sub-title="item.materialName || 'materialName'" :content="item.force || 0" :flag="item.result === 'P'"></my-card>
   </div>
 </template>
 

@@ -62,7 +62,7 @@
       justify-content: space-between;
       align-items: center;
       font-size: 18px;
-      font-weight: 800;
+      font-weight: 600;
       .dot {
         width: 13px;
         background: #30f1bd;
@@ -83,7 +83,8 @@
     .content {
       padding-top: 10px;
       padding-bottom: 20px;
-      font-size: 20px;
+      font-size: 24px;
+      font-weight: 800;
       text-align: center;
     }
 
