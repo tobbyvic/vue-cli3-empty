@@ -74,7 +74,7 @@
 </template>
 
 <script>
-  import {getWatchs, addWatch, updateWatch} from '../apis/watch.js';
+  import {getWatchs, addWatch, updateWatch, delWatch} from '../apis/watch.js';
 
   export default {
     name: "WatchTable",
@@ -176,15 +176,17 @@
       },
       // 点击删除按钮
       delRow({row}) {
-        this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
+        this.$confirm('将进行删除操作, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          delWatch({id: row.id}).then(res => {
+            this.$message.success(res.data.message);
+            this.init();
+          }).catch(e => {
+            this.$message.error(e,message);
+          })
         }).catch(() => {
         });
       },

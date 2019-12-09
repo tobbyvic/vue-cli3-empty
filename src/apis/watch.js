@@ -23,3 +23,11 @@ export function updateWatch(params) {
     data: params
   });
 }
+
+export function delWatch(params) {
+  return request({
+    url: '/api/v2/delwatch',
+    method: 'delete',
+    params: params
+  });
+}
