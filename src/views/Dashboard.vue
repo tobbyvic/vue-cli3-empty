@@ -1,6 +1,11 @@
 <template>
   <div>
-    <el-header class="layout-header">工站管理(<span style="color: #FFA500">{{ unitId || '--'}}</span>)</el-header>
+    <el-header class="layout-header">
+      <span>
+        工站管理(<span style="color: #FFA500">{{ unitId || '--'}}</span>)
+      </span>
+      <el-button @click="showWatchDialog = true" size="small" class="absolute-btn">手表设置</el-button>
+    </el-header>
     <div class="unit">型号：{{ materialGroup || '--' }}-{{ materialName || '--' }}</div>
     <div>
       <my-card v-for="(item, index) in list" :key="index" :title="item.name"
@@ -8,11 +13,13 @@
                :endTime="item.endDate || '--'"
                :flag="item.result === 'P'"></my-card>
     </div>
+    <watch-table :watch-dialog="showWatchDialog" @close-watch-dialog="showWatchDialog = false"></watch-table>
   </div>
 </template>
 
 <script>
   import MyCard from '../components/MyCard.vue';
+  import WatchTable from '../components/WatchTable.vue';
   import {dashStations} from '../apis/dashboard';
   import {session} from '../apis/setup';
 
@@ -20,6 +27,7 @@
     name: 'Dashboard',
     components: {
       MyCard,
+      WatchTable
     },
     data() {
       return {
@@ -27,6 +35,8 @@
         materialGroup: '', // nav栏
         materialName: '', // nav栏
         list: [],
+        // dialog
+        showWatchDialog: false
       };
     },
     created() {
@@ -154,6 +164,10 @@
     padding: 5px;
     font-size: 21px;
     font-weight: 500;
+  }
+  .absolute-btn {
+    position: absolute;
+    right: 20px;
   }
 
 </style>
