@@ -3,6 +3,7 @@
        :element-loading-text="`${loadingNum} 秒后跳转`"
        element-loading-spinner="el-icon-loading"
        element-loading-background="rgba(0, 0, 0, 0.8)">
+    <el-header class="layout-header">工站管理</el-header>
     <div class="top">
       <div class="step-container">
         <el-steps :active="active" finish-status="success" :align-center="true">
@@ -14,7 +15,7 @@
     <div class="main">
       <!--第一步-->
       <el-form width="600" v-if="isFirst" :model="form1" :rules="rules1" ref="ruleForm1"
-               label-width="100px" label-position="left">
+               label-width="180px" label-position="left">
         <el-form-item label="Host" prop="ip">
           <el-input style="width: 300px" v-model="form1.ip"></el-input>
         </el-form-item>
@@ -302,7 +303,7 @@ export default {
           this.active = 2; // 完成状态
           const params = {
             projectName: this.form2.project,
-            stations: this.tableData.map((item, index) => ({code: index + 1, name: item.name, alias: item.alias}))
+            stations: this.tableData.map((item, index) => ({code: index + 1, name: item.alias}))
           };
           this.$confirm('确认提交?', '提示', {
             confirmButtonText: '确定',

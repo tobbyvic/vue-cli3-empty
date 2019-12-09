@@ -8,13 +8,18 @@
       <div class="dot" v-bind:class="{ fail: !flag }">
       </div>
     </div>
-    <div class="header-second">
-      <div>
-        {{ subTitle }}
-      </div>
-    </div>
+    <!--    <div class="header-second">-->
+    <!--      <div>-->
+    <!--        {{ subTitle }}-->
+    <!--      </div>-->
+    <!--    </div>-->
     <div class="content">
-      {{ content }}
+      <div>
+        <span style="font-weight: 600">开始时间:</span>{{ startTime || '--' }}
+      </div>
+      <div>
+        <span style="font-weight: 600">结束时间:</span>{{ endTime || '--' }}
+      </div>
     </div>
   </div>
 </template>
@@ -36,6 +41,14 @@
         default: false
       },
       content: {
+        type: [String,Number],
+        default: ''
+      },
+      startTime: {
+        type: String,
+        default: ''
+      },
+      endTime: {
         type: String,
         default: ''
       }
@@ -65,13 +78,13 @@
       font-weight: 600;
       .dot {
         width: 13px;
-        background: #30f1bd;
+        background: #4CB843;
         height: 13px;
         border-radius: 50%;
       }
 
       .fail {
-        background: #a8b3b0;
+        background: #7F7F7F;
       }
     }
 
@@ -83,9 +96,9 @@
     .content {
       padding-top: 10px;
       padding-bottom: 20px;
-      font-size: 24px;
-      font-weight: 800;
-      text-align: center;
+      font-size: 14px;
+      /*font-weight: 800;*/
+      /*text-align: center;*/
     }
 
     &:hover {

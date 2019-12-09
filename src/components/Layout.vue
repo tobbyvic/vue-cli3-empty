@@ -1,16 +1,13 @@
 <template>
-  <div>
-    <el-header class="layout-header">工站管理</el-header>
-    <div class="page">
-      <router-view/>
-    </div>
+  <div class="page">
+    <router-view/>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'Layout',
-};
+  export default {
+    name: 'Layout',
+  };
 </script>
 
 <style lang="scss" scoped>
