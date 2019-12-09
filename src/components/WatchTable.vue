@@ -65,8 +65,8 @@
           <el-input v-model="myForm.name"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('my-form')">提交</el-button>
-          <el-button @click="resetForm('my-form')">重置</el-button>
+          <el-button type="primary" @click="submitForm('my-form')" v-loading="submitLoading">提交</el-button>
+          <el-button @click="resetForm('my-form')">清空</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -109,12 +109,17 @@
         },
         myRule: {
           address: [
-            {required: true, message: '请输入手表地址', trigger: 'blur'}
+            {required: true, message: '请输入手表地址', trigger: 'blur'},
+            {max: 30, message: '支持最多30个字符', trigger: 'blur'},
+            {pattern: /^[A-Za-z0-9]+$/, message: '只支持英文和数字', trigger: 'blur'}
           ],
           name: [
-            {required: true, message: '请输入手表名称', trigger: 'blur'}
+            {required: true, message: '请输入手表名称', trigger: 'blur'},
+            {max: 20, message: '支持最多30个字符', trigger: 'blur'},
+            {pattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/, message: '只支持中英文、数字、下划线', trigger: 'blur'}
           ]
-        }
+        },
+        submitLoading: false
       }
     },
     methods: {
@@ -171,7 +176,17 @@
       },
       // 点击删除按钮
       delRow({row}) {
-
+        this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+        });
       },
       // 关闭watch dialog
       closeWatchDialog() {
@@ -182,6 +197,7 @@
        */
       // 新增的接口
       addWatch() {
+        this.submitLoading = true;
         const params = {
           watchAddress: this.myForm.address,
           watchName: this.myForm.name
@@ -189,6 +205,7 @@
         return new Promise((resolve, reject) => {
           addWatch(params).then(res => {
             if (res.success) {
+              this.submitLoading = false;
               this.$message.success(res.data.message);
               this.innerVisible = false;
               this.init();
@@ -201,6 +218,7 @@
       },
       // 修改的接口
       updateWatch(id) {
+        this.submitLoading = true;
         const params = {
           id: id,
           watchAddress: this.myForm.address,
@@ -210,6 +228,7 @@
           updateWatch(params).then(res => {
             if (res.success) {
               this.$message.success(res.data.message);
+              this.submitLoading = false;
               this.innerVisible = false;
               this.init();
               resolve(res.data)
