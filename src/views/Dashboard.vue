@@ -87,7 +87,7 @@
       },
       // 初始化websocket
       initWebSocket() {
-        const serviceIp = '172.28.101.5:9806';
+        const serviceIp = '172.28.101.188:9806';
         // 判断当前浏览器是否支持WebSocket
         if ('WebSocket' in window) {
           this.websocket = new WebSocket(`ws://${serviceIp}/craft/getResponse`);
@@ -127,13 +127,14 @@
         if (typeof data === 'object') {
 
           for (const k in data) {
-            this.unitId = data[k].unitId; // 将推送过来的unitId放到上方nav栏
-            this.materialGroup = data[k].materialGroup; // 将推送过来的materialGroup放到上方nav栏
-            this.materialName = data[k].materialName; // 将推送过来的materialName放到上方nav栏
+            const obj = data[k]['info'][data[k]['info'].length - 1] || {};// 读取最后一条。
+            this.unitId = obj.unitId; // 将推送过来的unitId放到上方nav栏
+            this.materialGroup = obj.materialGroup; // 将推送过来的materialGroup放到上方nav栏
+            this.materialName = obj.materialName; // 将推送过来的materialName放到上方nav栏
 
             const i = this.list.findIndex(item => item.alias === k);
             const arr = [...this.list];
-            arr[i] = Object.assign({}, this.list[i], data[k]);
+            arr[i] = Object.assign({}, this.list[i], obj);
             this.list = arr;
           }
         }
