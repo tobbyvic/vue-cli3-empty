@@ -59,11 +59,14 @@
 
     },
     async mounted() {
-      this.judgeSession().then(async (res) => {
-        await this.initList();
-        // 判断session及获取list后再进行websocket连接
-        this.initWebSocket();
-      });
+      // this.judgeSession().then(async (res) => {
+      //   await this.initList();
+      //   // 判断session及获取list后再进行websocket连接
+      //   this.initWebSocket();
+      // });
+      await this.initList();
+      // 判断session及获取list后再进行websocket连接
+      this.initWebSocket();
       // 浏览器关闭事件，closeWebSocket
       const vm = this;
       window.onbeforeunload = function () {

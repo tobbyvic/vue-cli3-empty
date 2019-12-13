@@ -29,3 +29,11 @@ export function stations() {
     method: 'get',
   });
 }
+
+export function setupWatch(params) {
+  return request({
+    url: '/api/v1/watch',
+    method: 'post',
+    data: params
+  });
+}
