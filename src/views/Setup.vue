@@ -58,6 +58,14 @@
             width="450">
           </el-table-column>
           <el-table-column
+            prop="name"
+            label="工站名称"
+            width="450">
+            <template slot-scope="scope">
+              <el-input v-model="input" placeholder="请输入内容"></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column
             prop="operation"
             label="操作">
             <template slot-scope="scope">
@@ -113,7 +121,7 @@ export default {
       }
     };
     return {
-      active: 0,
+      active: 1,
       form1: {
         ip: '',
         port: 1521,
@@ -295,6 +303,9 @@ export default {
       });
       this.showModal = false;
     },
+    /**
+     *点击完成
+     */
     // 最终确认
     confirm() {
       // console.log(this.tableData);

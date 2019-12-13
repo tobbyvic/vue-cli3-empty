@@ -110,12 +110,12 @@
         myRule: {
           address: [
             {required: true, message: '请输入手表地址', trigger: 'blur'},
-            {max: 30, message: '支持最多30个字符', trigger: 'blur'},
-            {pattern: /^[A-Za-z0-9]+$/, message: '只支持英文和数字', trigger: 'blur'}
+            {max: 12, message: '支持最多12个字符', trigger: 'blur'},
+            {pattern: /^[0-9a-zA-Z_\-!#$%^&*@.]+$/, message: '只支持英文、数字及特殊字符', trigger: 'blur'}
           ],
           name: [
             {required: true, message: '请输入手表名称', trigger: 'blur'},
-            {max: 20, message: '支持最多30个字符', trigger: 'blur'},
+            {max: 20, message: '支持最多20个字符', trigger: 'blur'},
             {pattern: /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/, message: '只支持中英文、数字、下划线', trigger: 'blur'}
           ]
         },

@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Layout from '../components/Layout.vue';
+import {session} from '@/apis/setup';
+import { setToken } from '@/utils/token';
 
 Vue.use(VueRouter);
 
@@ -33,5 +35,32 @@ const routes = [
 const router = new VueRouter({
   routes,
 });
+
+// 导航守卫
+// router.beforeEach((to, from, next) => {
+  // 前往非setup
+  // if (to !== '/setup') {
+  //   session().then((res) => {
+  //     if (res.success) {
+  //       next('/setup');
+  //     } else {
+  //       next();
+  //     }
+  //   }).catch((e) => {
+  //     next();
+  //   });
+  // } else {
+  //   session().then(async res => {
+  //     if (res.success) {
+  //       setToken(res.data);
+  //       next()
+  //     } else {
+  //       next('/dashboard');
+  //     }
+  //   }).catch(e => {
+  //     next('/dashboard');
+  //   });
+  // }
+// });
 
 export default router;

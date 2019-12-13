@@ -2,13 +2,14 @@
   <div>
     <el-header class="layout-header">
       <span>
-        工站管理(<span style="color: #FFA500">{{ unitId || '--'}}</span>)
+        工站管理
+<!--        (<span style="color: #FFA500">{{ unitId || '&#45;&#45;'}}</span>)-->
       </span>
       <el-button @click="showWatchDialog = true" size="small" class="absolute-btn">手表设置</el-button>
     </el-header>
     <div class="unit">型号：{{ materialGroup || '--' }}-{{ materialName || '--' }}</div>
     <div>
-      <my-card v-for="(item, index) in list" :key="index" :title="item.name"
+      <my-card :id="`my-card` + index" v-for="(item, index) in list" :key="index" :title="item.name"
                :sub-title="item.materialName || 'materialName'" :startTime="item.startDate || '--'"
                :endTime="item.endDate || '--'"
                :flag="item.result === 'P'"></my-card>
@@ -18,10 +19,25 @@
 </template>
 
 <script>
+  import 'animate.css'
   import MyCard from '../components/MyCard.vue';
   import WatchTable from '../components/WatchTable.vue';
   import {dashStations} from '../apis/dashboard';
   import {session} from '../apis/setup';
+
+  function animateCSS(element, animationName, callback) {
+    const node = document.querySelector(element)
+    node.classList.add('animated', animationName)
+
+    function handleAnimationEnd() {
+      node.classList.remove('animated', animationName)
+      node.removeEventListener('animationend', handleAnimationEnd)
+
+      if (typeof callback === 'function') callback()
+    }
+
+    node.addEventListener('animationend', handleAnimationEnd)
+  }
 
   export default {
     name: 'Dashboard',
@@ -136,6 +152,8 @@
             const arr = [...this.list];
             arr[i] = Object.assign({}, this.list[i], obj);
             this.list = arr;
+
+            // animateCSS(`#my-card${i}`, 'bounce');
           }
         }
       },
@@ -166,6 +184,7 @@
     font-size: 21px;
     font-weight: 500;
   }
+
   .absolute-btn {
     position: absolute;
     right: 20px;
