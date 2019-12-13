@@ -13,6 +13,11 @@
     <!--        {{ subTitle }}-->
     <!--      </div>-->
     <!--    </div>-->
+<!--    <el-collapse v-model="activeNames">-->
+<!--      <el-collapse-item title="一致性 Consistency" name="1">-->
+<!--        <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>-->
+<!--      </el-collapse-item>-->
+<!--    </el-collapse>-->
     <div class="content">
       <div>
         <span style="font-weight: 600">开始时间:</span>{{ startTime || '--' }}
@@ -52,7 +57,12 @@
         type: String,
         default: ''
       }
-    }
+    },
+    data() {
+      return {
+        activeNames: ["1"]
+      }
+    },
   }
 </script>
 

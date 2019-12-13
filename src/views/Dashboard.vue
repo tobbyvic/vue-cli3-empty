@@ -3,9 +3,9 @@
     <el-header class="layout-header">
       <span>
         工站管理
-<!--        (<span style="color: #FFA500">{{ unitId || '&#45;&#45;'}}</span>)-->
+        <!--        (<span style="color: #FFA500">{{ unitId || '&#45;&#45;'}}</span>)-->
       </span>
-      <el-button @click="showWatchDialog = true" size="small" class="absolute-btn">手表设置</el-button>
+      <el-button @click="clickSetBtn" size="small" class="absolute-btn">设置</el-button>
     </el-header>
     <div class="unit">型号：{{ materialGroup || '--' }}-{{ materialName || '--' }}</div>
     <div>
@@ -22,7 +22,7 @@
   import 'animate.css'
   import MyCard from '../components/MyCard.vue';
   import WatchTable from '../components/WatchTable.vue';
-  import {dashStations} from '../apis/dashboard';
+  import {dashStations, validatePwd, modifyPwd} from '../apis/dashboard';
   import {session} from '../apis/setup';
 
   function animateCSS(element, animationName, callback) {
@@ -170,6 +170,34 @@
           console.log('清除定时器');
         }
       },
+      /**
+       * 点击设置
+       */
+      // 需要先拦截一下，有密码保护
+      clickSetBtn() {
+        this.$prompt('请输入密码', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(({value}) => {
+          validatePwd({password: value}).then(res => {
+            if (res.success) {
+              this.$message.success(res.data.message);
+              this.$nextTick(() => {
+                this.showWatchDialog = true;
+              })
+            } else {
+              this.$message.error(res.data.errorMessage);
+            }
+          }).catch(e => {
+            this.$message.error('接口请求错误');
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });
+        });
+      }
     },
   };
 </script>
