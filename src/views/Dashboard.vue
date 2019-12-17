@@ -1,20 +1,29 @@
 <template>
-  <div>
-    <el-header class="layout-header">
-      <span>
-        工站管理
-        <!--        (<span style="color: #FFA500">{{ unitId || '&#45;&#45;'}}</span>)-->
-      </span>
-      <el-button @click="clickSetBtn" size="small" class="absolute-btn">设置</el-button>
-    </el-header>
-    <div class="unit">型号：{{ materialGroup || '--' }}-{{ materialName || '--' }}</div>
+  <div class="my-dialog">
+    <svg-header>
+      <el-button @click="validatorModal = true" size="small" class="absolute-btn">设置</el-button>
+    </svg-header>
+
+<!--    <div class="unit">型号：{{ materialGroup || '&#45;&#45;' }}-{{ materialName || '&#45;&#45;' }}</div>-->
     <div>
       <my-card :id="`my-card` + index" v-for="(item, index) in list" :key="index" :title="item.name"
-               :sub-title="item.materialName || 'materialName'" :startTime="item.startDate || '--'"
-               :endTime="item.endDate || '--'"
+               :sub-title="item.materialName || 'materialName'" :startTime="item.startDate || ''"
+               :endTime="item.endDate || ''"
                :flag="item.result === 'P'"></my-card>
     </div>
     <watch-table :watch-dialog="showWatchDialog" @close-watch-dialog="showWatchDialog = false"></watch-table>
+    <!--  校验密码的modal  -->
+    <el-dialog title="验证密码" :visible.sync="validatorModal" width="40%" :close-on-click-modal="false"
+               :close-on-press-escape="false">
+      <el-form :model="validatorForm" :rules="validatorRules" ref="validator-form">
+        <el-form-item prop="pwd">
+          <el-input v-model="validatorForm.pwd" auto-complete="off" show-password @keyup.native.enter="confirmPwd"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmPwd">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -24,6 +33,8 @@
   import WatchTable from '../components/WatchTable.vue';
   import {dashStations, validatePwd, modifyPwd} from '../apis/dashboard';
   import {session} from '../apis/setup';
+  import SvgHeader from '@/components/SvgHeader';
+  import {removeValue, getValue, setValue} from '@/utils/validate.js';
 
   function animateCSS(element, animationName, callback) {
     const node = document.querySelector(element)
@@ -43,7 +54,8 @@
     name: 'Dashboard',
     components: {
       MyCard,
-      WatchTable
+      WatchTable,
+      SvgHeader
     },
     data() {
       return {
@@ -52,7 +64,17 @@
         materialName: '', // nav栏
         list: [],
         // dialog
-        showWatchDialog: false
+        showWatchDialog: false,
+        // 验证密码modal
+        validatorForm: {
+          pwd: ''
+        },
+        validatorRules: {
+          pwd: [
+            {required: true, message: '请输入密码', trigger: 'blur'}
+          ]
+        },
+        validatorModal: false
       };
     },
     created() {
@@ -175,50 +197,87 @@
        */
       // 需要先拦截一下，有密码保护
       clickSetBtn() {
-        this.$prompt('请输入密码', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-        }).then(({value}) => {
-          validatePwd({password: value}).then(res => {
-            if (res.success) {
-              this.$message.success(res.data.message);
-              this.$nextTick(() => {
-                this.showWatchDialog = true;
-              })
-            } else {
-              this.$message.error(res.data.errorMessage);
-            }
-          }).catch(e => {
-            this.$message.error('接口请求错误');
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });
+        this.validatorModal = true;
+        // this.$prompt('请输入密码', '提示', {
+        //   confirmButtonText: '确定',
+        //   cancelButtonText: '取消',
+        // }).then(({value}) => {
+        //   validatePwd({password: value}).then(res => {
+        //     if (res.success) {
+        //       this.$message.success(res.data.message);
+        //       setValue('isLogin', 1);
+        //       this.$nextTick(() => {
+        //         // this.showWatchDialog = true;
+        //         this.$router.push(`/setting`);
+        //       })
+        //     } else {
+        //       this.$message.error(res.data.errorMessage);
+        //     }
+        //   }).catch(e => {
+        //     this.$message.error('接口请求错误');
+        //   })
+        // }).catch(() => {
+        // });
+      },
+      validateForm(formName) {
+        let flag = false;
+        this.$refs[formName].validate((valid) => {
+          flag = !!valid;
         });
+        return flag
+      },
+      confirmPwd() {
+        const val = this.validatorForm.pwd;
+        if (!this.validateForm('validator-form')) return;
+        validatePwd({password: val}).then(res => {
+          if (res.success) {
+            this.$message.success(res.data.message);
+            setValue('isLogin', 1);
+            this.validatorModal = false;
+            this.$nextTick(() => {
+              this.$router.push(`/setting`);
+            })
+          } else {
+            this.$message.error(res.data.errorMessage);
+          }
+        }).catch(e => {
+          this.$message.error('接口请求错误');
+        })
       }
     },
   };
 </script>
 
-<style lang="scss" scoped>
-  .unit {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px 10px 0 10px;
-    border-radius: 3px;
-    color: #DA6C3D;
-    background: #303136;
-    padding: 5px;
-    font-size: 21px;
-    font-weight: 500;
-  }
-
+<style lang="scss">
   .absolute-btn {
+    background: #FEA500;
+    border-color: #FEA500;
     position: absolute;
     right: 20px;
   }
-
+  .my-dialog {
+    .unit {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 10px 10px 0 10px;
+      color: #DA6C3D;
+      background: #ffffff;
+      padding: 5px;
+      font-size: 21px;
+      font-weight: 500;
+      border-radius: 4px;
+      border: 1px solid #ebeef5;
+    }
+     .el-dialog__header {
+      span.el-dialog__title:before {
+        margin-right: 4px;
+        content: '*';
+        color: red;
+      }
+    }
+    .el-dialog__body {
+      padding: 15px;
+    }
+  }
 </style>

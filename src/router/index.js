@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Layout from '../components/Layout.vue';
 import {session} from '@/apis/setup';
 import {setToken} from '@/utils/token';
+import {removeValue, getValue, setValue} from '@/utils/validate.js';
 
 Vue.use(VueRouter);
 
@@ -20,6 +21,10 @@ const routes = [
       path: 'dashboard',
       name: 'dashboard',
       component: () => import('../views/Dashboard.vue'),
+    }, {
+      path: 'setting',
+      name: 'setting',
+      component: () => import('../views/Setting.vue'),
     }],
   },
   {
@@ -49,6 +54,12 @@ router.beforeEach((to, from, next) => {
     }).catch((e) => {
       next(`/dashboard`);
     });
+  } else if(to.path === `/setting`) {
+    if (getValue('isLogin')) {
+      next();
+    } else {
+      next(`/dashboard`);
+    }
   } else {
     session().then((res) => {
       if (res.success) {

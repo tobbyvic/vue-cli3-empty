@@ -3,7 +3,10 @@
        :element-loading-text="`${loadingNum} 秒后跳转`"
        element-loading-spinner="el-icon-loading"
        element-loading-background="rgba(0, 0, 0, 0.8)">
-    <el-header class="layout-header">工站管理</el-header>
+<!--    <el-header class="layout-header">工站管理</el-header>-->
+    <svg-header>
+<!--      <el-button @click="clickSetBtn" size="small" class="absolute-btn">设置</el-button>-->
+    </svg-header>
     <div class="top">
       <div class="step-container">
         <el-steps :active="active" finish-status="success" :align-center="true">
@@ -188,6 +191,7 @@
 </template>
 
 <script>
+  import SvgHeader from '@/components/SvgHeader';
   import {
     session, dbcfg, station, stations, setupWatch
   } from '@/apis/setup';
@@ -195,7 +199,9 @@
   // @ is an alias to /src
   export default {
     name: 'Setup',
-    components: {},
+    components: {
+      SvgHeader
+    },
     data() {
       const checkCpassword = (rule, value, callback) => {
         if (value === this.form1.password) {
@@ -273,7 +279,8 @@
         }, // 服务地址
         rules3: {
           watchHost: [
-            {required: true, message: '请输入服务地址', trigger: 'change'}
+            {required: true, message: '请输入服务地址', trigger: 'change'},
+            // {max: 30, message: '支持最多30个字符', trigger: 'blur'},
           ],
         },
         watchVisible: false,
@@ -533,7 +540,10 @@
         setTimeout(() => {
           this.loadingNum--;
           if (this.loadingNum === 0) {
+            // 初始化
             this.loading = false;
+            this.loadingNum = 5;
+            // 跳转到面板
             this.$router.push('/dashboard');
           } else {
             this.loadAndGo();

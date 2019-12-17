@@ -20,10 +20,10 @@
 <!--    </el-collapse>-->
     <div class="content">
       <div>
-        <span style="font-weight: 600">开始时间:</span>{{ startTime || '--' }}
+        <span style="font-weight: 600">开始时间:</span>{{ startTime || '' }}
       </div>
       <div>
-        <span style="font-weight: 600">结束时间:</span>{{ endTime || '--' }}
+        <span style="font-weight: 600">结束时间:</span>{{ endTime || '' }}
       </div>
     </div>
   </div>
@@ -68,11 +68,12 @@
 
 <style lang="scss" scoped>
   .my-card {
-    margin: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
     background: #ffffff;
     display: inline-flex;
     flex-flow: column;
-    padding: 20px;
+    padding: 10px;
     width: 250px;
     border-radius: 4px;
     border: 1px solid #ebeef5;
@@ -104,8 +105,7 @@
     }
 
     .content {
-      padding-top: 10px;
-      padding-bottom: 20px;
+      padding: 10px 0;
       font-size: 14px;
       /*font-weight: 800;*/
       /*text-align: center;*/
