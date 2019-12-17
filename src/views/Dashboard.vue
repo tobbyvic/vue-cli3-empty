@@ -254,6 +254,8 @@
     border-color: #FEA500;
     position: absolute;
     right: 20px;
+    border-radius: inherit;
+    color: #000000;
   }
   .my-dialog {
     .unit {
